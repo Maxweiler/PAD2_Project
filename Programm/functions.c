@@ -3,7 +3,7 @@
 #include <string.h>
 #include "header.h"
 
-void readLSM(){
+void readLSM(LSM test){
     int anfang;
     int ende;
     printf("Sensordaten des  LSM9DS1 Sensors:\n\n");
@@ -19,7 +19,7 @@ void readLSM(){
         printf("Fehler");
         exit(1);
     }
-    while(EOF!=fscanf(thefile,"%d;%x;%x;%x;%x;%x;%x;%x;%x;%x",&LSM.tstamp,&LSM.accx,&LSM.accy,&LSM.accz,&LSM.gyrox,&LSM.gyroy,&LSM.gyroz,&LSM.magx,&LSM.magy,&LSM.magz)) {
+    while(EOF!=fscanf(thefile,"%d;%x;%x;%x;%x;%x;%x;%x;%x;%x",&test.tstamp,&test.accx,&test.accy,&test.accz,&test.gyrox,&test.gyroy,&test.gyroz,&test.magx,&test.magy,&test.magz)) {
 
 
         if(zahl1>=anfang&& zahl1<=ende){
