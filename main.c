@@ -30,7 +30,7 @@ printf("Ende:");
 scanf("%d", &ende);
 
 
-FILE *thefile = fopen("data.csv", "r");
+FILE *thefile = fopen("Test_Data_20k_IMU-LSM9DS1.csv", "r");
     if (NULL==thefile)
     {
         printf("Fehler");
