@@ -22,13 +22,14 @@ void readLSM(LSM test){
     while(EOF!=fscanf(thefile,"%d;%x;%x;%x;%x;%x;%x;%x;%x;%x",&test.tstamp,&test.accx,&test.accy,&test.accz,&test.gyrox,&test.gyroy,&test.gyroz,&test.magx,&test.magy,&test.magz)) {
 
 
-        if(zahl1>=anfang&& zahl1<=ende){
+        if(test.tstamp>=anfang&& test.tstamp<=ende){
 
+        if(test.accx & 2147483648){
 
-
-            //printf("Zeitpunkt: %d Sek\nAccelerometer: |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\nGyroskop:      |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\nMagnetometer:  |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\n\n", );
+           // printf("Zeitpunkt: %d Sek\nAccelerometer: |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\nGyroskop:      |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\nMagnetometer:  |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\n\n", );
+        printf("HI");
         }
-
+        }
     }
     fclose(thefile);
 
