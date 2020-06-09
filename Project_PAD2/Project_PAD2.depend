@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1591703284 source:c:\users\mbrus\documents\github\pad2_project\project_pad2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
