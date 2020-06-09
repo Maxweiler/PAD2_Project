@@ -1,6 +1,9 @@
 #ifndef HEADER_H_INCLUDED
 #define HEADER_H_INCLUDED
 
+
+
+
 typedef struct{
     int tstamp;
     int accx;
@@ -14,6 +17,6 @@ typedef struct{
     int magz;
 }LSM;
 
-LSM readLSM();
+void readLSM();
 
 #endif // HEADER_H_INCLUDED

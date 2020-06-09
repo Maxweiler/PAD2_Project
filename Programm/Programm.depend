@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1591711288 source:c:\users\mbrus\documents\github\pad2_project\programm\main.c
+1591714368 source:c:\users\mbrus\documents\github\pad2_project\programm\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"header.h"
 
-1591711801 c:\users\mbrus\documents\github\pad2_project\programm\header.h
+1591713797 c:\users\mbrus\documents\github\pad2_project\programm\header.h
 
