@@ -25,10 +25,39 @@ void readLSM(){
         exit(1);
     }
 
+    //strtol
+    //while(1==1)){
+        fgets(zeile,100,thefile);
+        char *ptr;
 
-    while(EOF!=fscanf(thefile,"%d;%x;%x;%x;%x;%x;%x;%x;%x;%x",
-        &lsm[0],&lsm[1],&lsm[2],&lsm[3],&lsm[4],&lsm[5],&lsm[6],&lsm[7],&lsm[8],&lsm[9])) {
-        if(lsm[0]<anfang){
+        ptr=strtok(zeile,";");
+        int counter=0;
+        while(ptr!=0){
+            if(counter==0){
+                lsm[counter]=atoi(ptr);
+            }else{
+                lsm[counter]=strtol(ptr,NULL,16);
+            }
+             ptr = strtok(NULL, ";");
+             counter++;
+             printf("%d ",test);
+        }
+
+
+
+
+        /*for(int i=0;i<10;i++){
+            printf("%d ",lsm[i]);
+
+        }*/
+
+
+
+
+
+
+
+        /*if(lsm[0]<anfang){
             continue;
         }else if(lsm[0]>ende){
             break;
@@ -44,12 +73,14 @@ void readLSM(){
             printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n",
             lsm[0],lsm[1],lsm[2],lsm[3],lsm[4],lsm[5],lsm[6],lsm[7],lsm[8],lsm[9]);
 
-        }
-    }
+        }*/
+    //}
     fclose(thefile);
 
 
 
 }
+
+
 
 
