@@ -3,6 +3,10 @@
 #include <string.h>
 #include "header.h"
 
+
+
+
+
 void readLSM(){
 
     int anfang;
@@ -24,7 +28,11 @@ void readLSM(){
 
     while(EOF!=fscanf(thefile,"%d;%x;%x;%x;%x;%x;%x;%x;%x;%x",
         &lsm[0],&lsm[1],&lsm[2],&lsm[3],&lsm[4],&lsm[5],&lsm[6],&lsm[7],&lsm[8],&lsm[9])) {
-
+        if(lsm[0]<anfang){
+            continue;
+        }else if(lsm[0]>ende){
+            break;
+        }
 
         if(lsm[0]>=anfang && lsm[0]<=ende){
             for(int i=1;i<=9;i++){
