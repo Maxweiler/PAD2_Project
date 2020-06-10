@@ -7,7 +7,7 @@ void readLSM(LSM test){
     int anfang;
     int ende;
     printf("Sensordaten des  LSM9DS1 Sensors:\n\n");
-    printf("Bitte waehlen Sie eine Zeitspanne fuer die Sensordaten!\n");
+    printf("Bitte waehlen Sie eine Zeitspanne fuer die Sensordaten!\n\n");
     printf("Anfang:");
     scanf("%d", &anfang);
     printf("Ende:");
@@ -26,9 +26,10 @@ void readLSM(LSM test){
 
         if(test.accx & 2147483648){
 
-           // printf("Zeitpunkt: %d Sek\nAccelerometer: |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\nGyroskop:      |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\nMagnetometer:  |%8d X-Achse| |%8d Y-Achse| %8d Z-Achse|\n\n", );
-        printf("HI");
-        }
+             test.accx=test.accx-4294967295;
+}
+            printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n", test.tstamp,test.accx,test.accy,test.accz,test.gyrox,test.gyroy,test.gyroz,test.magx,test.magy,test.magz);
+
         }
     }
     fclose(thefile);
