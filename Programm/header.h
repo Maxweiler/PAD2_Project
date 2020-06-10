@@ -3,19 +3,7 @@
 
 
 
-
-typedef struct{
-    int tstamp;
-    int accx;
-    int accy;
-    int accz;
-    int gyrox;
-    int gyroy;
-    int gyroz;
-    int magx;
-    int magy;
-    int magz;
-}LSM;
+int lsm[10];
 
 void readLSM();
 

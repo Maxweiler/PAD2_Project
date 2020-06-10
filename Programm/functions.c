@@ -3,7 +3,8 @@
 #include <string.h>
 #include "header.h"
 
-void readLSM(LSM test){
+void readLSM(){
+
     int anfang;
     int ende;
     printf("Sensordaten des  LSM9DS1 Sensors:\n\n");
@@ -19,20 +20,23 @@ void readLSM(LSM test){
         printf("Fehler");
         exit(1);
     }
-    while(EOF!=fscanf(thefile,"%d;%x;%x;%x;%x;%x;%x;%x;%x;%x",&test.tstamp,&test.accx,&test.accy,&test.accz,&test.gyrox,&test.gyroy,&test.gyroz,&test.magx,&test.magy,&test.magz)) {
 
 
-        if(test.tstamp>=anfang&& test.tstamp<=ende)
-            {
+    while(EOF!=fscanf(thefile,"%d;%x;%x;%x;%x;%x;%x;%x;%x;%x",
+        &lsm[0],&lsm[1],&lsm[2],&lsm[3],&lsm[4],&lsm[5],&lsm[6],&lsm[7],&lsm[8],&lsm[9])) {
 
 
-            if(test.accx & 2147483648)
-                {
-                test.accx=test.accx-4294967295;
+        if(lsm[0]>=anfang && lsm[0]<=ende){
+            for(int i=1;i<=9;i++){
+                if(lsm[i] & 80000000){
+                    lsm[i]-=0xFFFFFFFF;
                 }
-            printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n", test.tstamp,test.accx,test.accy,test.accz,test.gyrox,test.gyroy,test.gyroz,test.magx,test.magy,test.magz);
 
             }
+            printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n",
+            lsm[0],lsm[1],lsm[2],lsm[3],lsm[4],lsm[5],lsm[6],lsm[7],lsm[8],lsm[9]);
+
+        }
     }
     fclose(thefile);
 
