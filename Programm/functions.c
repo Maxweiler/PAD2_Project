@@ -25,31 +25,84 @@ void readLSM(){
         exit(1);
     }
 
-    //strtol
-    //while(1==1)){
-        fgets(zeile,100,thefile);
-        char *ptr;
 
+    while(fgets(zeile,100,thefile)){
+        LSM data;
+
+        char *ptr=NULL;
+        long long test=0;
         ptr=strtok(zeile,";");
+
         int counter=0;
         while(ptr!=0){
-            if(counter==0){
-                lsm[counter]=atoi(ptr);
-            }else{
-                lsm[counter]=strtol(ptr,NULL,16);
+            switch(counter){
+                case 0:
+                    data.timestamp=atoi(ptr);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 1:
+                    data.accx=strtoll(ptr,NULL,16);
+                    invertieren(data.accx);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 2:
+                    data.accy=strtoll(ptr,NULL,16);
+                    invertieren(data.accy);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 3:
+                    data.accz=strtoll(ptr,NULL,16);
+                    invertieren(data.accz);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 4:
+                    data.gyrox=strtoll(ptr,NULL,16);
+                    invertieren(data.gyrox);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 5:
+                    data.gyroy=strtoll(ptr,NULL,16);
+                    invertieren(data.gyroy);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 6:
+                    data.gyroz=strtoll(ptr,NULL,16);
+                    invertieren(data.gyroz);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 7:
+                    data.magx=strtoll(ptr,NULL,16);
+                    invertieren(data.magx);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 8:
+                    data.magy=strtoll(ptr,NULL,16);
+                    invertieren(data.magy);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
+                case 9:
+                    data.magz=strtoll(ptr,NULL,16);
+                    invertieren(data.magz);
+                    ptr=strtok(NULL,";");
+                    counter++;
+                    break;
             }
-             ptr = strtok(NULL, ";");
-             counter++;
+
+
 
         }
-
-
-
-
-        for(int i=0;i<10;i++){
-            printf("%d ",lsm[i]);
-
-        }
+        printf("\n");
+        printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n",
+            data.timestamp,data.accx,data.accy,data.accz,data.gyrox,data.gyroy,data.gyroz,data.magx,data.magy,data.magz);
 
 
 
@@ -57,28 +110,20 @@ void readLSM(){
 
 
 
-        /*if(lsm[0]<anfang){
-            continue;
-        }else if(lsm[0]>ende){
-            break;
-        }
-
-        if(lsm[0]>=anfang && lsm[0]<=ende){
-            for(int i=1;i<=9;i++){
-                if(lsm[i] & 80000000){
-                    lsm[i]-=0xFFFFFFFF;
-                }
-
-            }
-            printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n",
-            lsm[0],lsm[1],lsm[2],lsm[3],lsm[4],lsm[5],lsm[6],lsm[7],lsm[8],lsm[9]);
-
-        }*/
-    //}
+    }
     fclose(thefile);
 
 
 
+}
+
+
+long long invertieren(long long wert){
+    if(wert & 80000000){
+       wert-=0xFFFFFFFF;
+    }
+
+    return wert;
 }
 
 
