@@ -2,6 +2,8 @@
 #define HEADER_H_INCLUDED
 
 
+void menu();
+
 char zeile[100];
 typedef struct{
     int timestamp;
@@ -14,7 +16,6 @@ typedef struct{
     long long magx;
     long long magy;
     long long magz;
-
 }LSM;
 
 void readLSM();
