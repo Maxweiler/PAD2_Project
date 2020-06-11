@@ -249,7 +249,9 @@ void readLSM(int start,int ende,int auswahl_wert)
                 {
                 case 0:
                     data.accx=strtoll(ptr,NULL,16);
-                    invertieren(data.accx);
+                    printf("%d",data.accx);
+                    data.accx=invertieren(data.accx);
+                    printf("%d",data.accx);
                     ptr=strtok(NULL,";");
                     counter++;
                     break;
@@ -343,12 +345,12 @@ void readLSM(int start,int ende,int auswahl_wert)
 
 long long invertieren(long long wert)
 {
-    if(wert & 80000000)
+    if((wert>31) & 1)
     {
         wert-=0xFFFFFFFF;
     }
-
     return wert;
+
 }
 
 
