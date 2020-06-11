@@ -321,6 +321,8 @@ void readLSM(int start,int ende,int auswahl_wert)
                 printf("Zeitpunkt: %d Sek\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|",data.timestamp,data.magx,data.magy,data.magz);
                 break;
             }
+
+            printf("\n");
             /* Gesamte Ausgabe falls nötig
             printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n",
              data.timestamp,data.accx,data.accy,data.accz,data.gyrox,data.gyroy,data.gyroz,data.magx,data.magy,data.magz);*/
