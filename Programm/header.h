@@ -3,6 +3,10 @@
 
 
 void menu();
+void hex_time(time_t rawtime);
+void LPS25HB(int start, int ende);
+void LPS25HB_pressure(int PRESS_OUT_XL, int PRESS_OUT_L, int PRESS_OUT_H);
+void LPS25HB_temp(int TEMP_OUT_L, int TEMP_OUT_H);
 
 char zeile[100];
 typedef struct{

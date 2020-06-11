@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "header.h"
+
 
 void menu()
 {
@@ -99,7 +101,8 @@ void menu()
                     scanf("%d",&start);
                     printf("Endzeit:");
                     scanf("%d",&ende);
-                    printf("%d-%d\n", start, ende);             //Funktionsaufruf
+                    //printf("%d-%d\n", start, ende);
+                    LPS25HB(start,ende);           //Funktionsaufruf
                     printf("Anderen Zeitraum waehlen(1) oder zurueck zum Menue(5)?");
                     scanf("%d", &nav);
                     if(nav==5)
@@ -117,7 +120,8 @@ void menu()
                     scanf("%d",&start);
                     printf("Endzeit:");
                     scanf("%d",&ende);
-                    printf("%d-%d\n", start, ende);             //Funktionsaufruf
+                    //printf("%d-%d\n", start, ende); 
+                    LPS25HB(start,ende);            //Funktionsaufruf
                     printf("Anderen Zeitraum waehlen(1) oder zurueck zum Menue(5)?");
                     scanf("%d", &nav);
                     if(nav==5)
@@ -203,12 +207,6 @@ void menu()
                 break;
             }
             break;
-
-
-
-
-
-
         default:
             printf("Ungueltige Auswahl!\n");
             break;
@@ -324,7 +322,7 @@ void readLSM(int start,int ende,int auswahl_wert)
             }
 
             printf("\n");
-            /* Gesamte Ausgabe falls nötig
+            /* Gesamte Ausgabe falls nï¿½tig
             printf("Zeitpunkt: %d Sek\nAccelerometer   [mg/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nGyroskop      [mdps/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\nMagnetometer[mgauss/LSB]:|%5d X-Achse| |%5d Y-Achse| %5d Z-Achse|\n\n",
              data.timestamp,data.accx,data.accy,data.accz,data.gyrox,data.gyroy,data.gyroz,data.magx,data.magy,data.magz);*/
 
@@ -353,6 +351,87 @@ long long invertieren(long long wert)
 
 }
 
+// LPS25HB-------------------------------------------------------------------
 
+void hex_time(time_t rawtime)
+{
+    struct tm  ts;
+    char buf[80];
+    // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
+    ts = *localtime(&rawtime);
+    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S", &ts);
+    printf("%s\n", buf);
+}
+
+void LPS25HB_pressure(int PRESS_OUT_XL, int PRESS_OUT_L, int PRESS_OUT_H)
+{
+    float num = (PRESS_OUT_H << 16) + (PRESS_OUT_L << 8) + PRESS_OUT_XL;
+    printf("Druck: %.4f hPa\n", num/4096);
+}
+
+void LPS25HB_temp(int TEMP_OUT_L, int TEMP_OUT_H)
+{
+    int num = (TEMP_OUT_H << 8) + TEMP_OUT_L;
+    if ((num >> 15) & 1)
+    {
+        num -= 0XFFFF;
+        printf("Temperatur: %.4f deg. Celcius\n",(float)num/480 +42.5);
+    }
+    else
+    {
+        printf("Temperatur: %.4f deg. Celcius\n",(float)num/480 +42.5);
+    }
+}
+
+void LPS25HB(int start, int ende)// Temperatur und Drucksensor
+{
+    char filename[100] = "Test_Data_10k_LPS25.csv";
+    FILE *file = fopen(filename, "r");
+    if(file == NULL) 
+    {
+	    printf("Datei konnte NICHT geoeffnet werden.\n");
+        exit(-1);
+    }
+    char line[100];
+    
+    fgets(line, sizeof(line), file);
+    printf("Zeile: %s", line);
+    char delimiter[] = ";";
+    char *token = strtok(line, delimiter);
+    int counter = 0;
+    int PRESS_OUT_[3];
+    int TEMP_OUT_[2];
+    while(token != NULL)
+    {
+        switch (counter)
+        {
+        case 0:
+            hex_time((time_t)token);
+            break;
+        case 1:
+            TEMP_OUT_[0] = (int)strtol(token, NULL, 16);
+            break;
+        case 2:
+            TEMP_OUT_[1] = (int)strtol(token, NULL, 16);
+            LPS25HB_temp(TEMP_OUT_[0], TEMP_OUT_[1]);
+            break;
+        case 3:
+            PRESS_OUT_[0] = (int)strtol(token, NULL, 16);
+            break;
+        case 4:
+            PRESS_OUT_[1] = (int)strtol(token, NULL, 16);
+            break;
+        case 5:
+            PRESS_OUT_[2] = (int)strtol(token, NULL, 16);
+            LPS25HB_pressure(PRESS_OUT_[0], PRESS_OUT_[1], PRESS_OUT_[2]);
+            break;
+        default:
+            break;
+        }
+        token = strtok(NULL, delimiter);
+        counter++;
+    }
+}
+//------------------------------------------------------------------------------------------------------
 
 
