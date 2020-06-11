@@ -223,7 +223,6 @@ void menu()
 
 void readLSM(int start,int ende,int auswahl_wert)
 {
-    printf("Start: %d, Ende: %d",start,ende);
     FILE *thefile = fopen("Test_Data_20k_IMU-LSM9DS1.csv", "r");
     if (NULL==thefile)
     {
