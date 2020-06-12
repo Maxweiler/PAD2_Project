@@ -8,18 +8,20 @@
 
 1591887908 c:\users\mbrus\documents\github\pad2_project\programm\header.h
 
-1591715014 source:c:\users\nicsc\documents\github\pad2_project\programm\main.c
+1591989447 source:c:\users\nicsc\documents\github\pad2_project\programm\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<time.h>
 	"header.h"
 
-1591715014 c:\users\nicsc\documents\github\pad2_project\programm\header.h
+1591989447 c:\users\nicsc\documents\github\pad2_project\programm\header.h
 
-1591792149 source:c:\users\nicsc\documents\github\pad2_project\programm\functions.c
+1591990849 source:c:\users\nicsc\documents\github\pad2_project\programm\functions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<time.h>
 	"header.h"
 
 1591887908 source:c:\users\mbrus\documents\github\pad2_project\programm\functions.c

@@ -211,9 +211,10 @@ void menu()
             printf("Ungueltige Auswahl!\n");
             break;
 
-        }
+    }
 
 
+    nav=1;              //Zuruecksetzen der navigationsvariable
     }
 }
 
