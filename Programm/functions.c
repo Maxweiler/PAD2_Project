@@ -330,6 +330,9 @@ void readLSM(int start,int ende,int auswahl_wert)
 
 
 
+        }else if(data.timestamp>ende || data.timestamp>start){
+            printf("Ungueltiger Wertebereich\n");
+            break;
         }
     }
 
@@ -400,6 +403,7 @@ void LPS25HB(int start, int ende)// Temperatur und Drucksensor
     int counter = 0;
     int PRESS_OUT_[3];
     int TEMP_OUT_[2];
+
     while(token != NULL)
     {
         switch (counter)
