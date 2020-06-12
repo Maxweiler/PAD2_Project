@@ -5,7 +5,7 @@
 #include "header.h"
 
 
-void menu()
+int menu()
 {
     int nav=1;
     int auswahl_sensor=0;
@@ -24,8 +24,12 @@ void menu()
         printf("1) HTS221 --> Temperatur - rel. Luftfeuchtigkeit\n");
         printf("2) LPS25HB --> Temperatur - Druck\n");
         printf("3) LSM9DS1 IMU --> Accelerometer - Gyroskop - Magnetometer\n\n");
+        printf("4) Programm beenden\n\n");
         printf("Bitte waehlen Sie einen der zu Verfuegung stehenden Sensoren(1-3):");
-        scanf("%d", &auswahl_sensor);
+        //scanf("%d", &auswahl_sensor);
+        char name[100];
+        scanf("%s", name);
+        auswahl_sensor = atoi(name);
 
         switch(auswahl_sensor)
         {
@@ -47,7 +51,7 @@ void menu()
                     scanf("%d",&start);
                     printf("Endzeit:");
                     scanf("%d",&ende);
-                    printf("%d-%d\n", start, ende);             //Funktionsaufruf
+                    HTS221(start, ende);             //Funktionsaufruf
                     printf("Anderen Zeitraum waehlen(1) oder zurueck zum Menue(5)?");
                     scanf("%d", &nav);
                     if(nav==5)
@@ -67,7 +71,7 @@ void menu()
                     scanf("%d",&start);
                     printf("Endzeit:");
                     scanf("%d",&ende);
-                    printf("%d-%d\n", start, ende);             //Funktionsaufruf
+                    HTS221(start, ende);
                     printf("Anderen Zeitraum waehlen(1) oder zurueck zum Menue(5)?");
                     scanf("%d", &nav);
                     if(nav==5)
@@ -207,14 +211,16 @@ void menu()
                 break;
             }
             break;
+        case 4:
+            return 0;
         default:
             printf("Ungueltige Auswahl!\n");
             break;
 
-    }
+        }
 
 
-    nav=1;              //Zuruecksetzen der navigationsvariable
+        nav=1;              //Zuruecksetzen der navigationsvariable
     }
 }
 
@@ -330,7 +336,9 @@ void readLSM(int start,int ende,int auswahl_wert)
 
 
 
-        }else if(data.timestamp>ende || data.timestamp>start){
+        }
+        else if(data.timestamp>ende || data.timestamp>start)
+        {
             printf("Ungueltiger Wertebereich\n");
             break;
         }
@@ -354,15 +362,26 @@ long long invertieren(long long wert)
 }
 
 // LPS25HB-------------------------------------------------------------------
+int invert(int input)
+{
+    if((input >> 15) & 1)
+    {
+        input -= 0XFFFF;
+    }
+    return input;
+}
 
-void hex_time(time_t rawtime)
+void hex_time(time_t rawtime, double msec)
 {
     struct tm  ts;
     char buf[80];
     // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
     ts = *localtime(&rawtime);
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S", &ts);
-    printf("%s\n", buf);
+    printf("%s:", buf);
+    msec -= (double)rawtime;
+    msec *= 100000;
+    printf("%4.f\n", msec);
 }
 
 void LPS25HB_pressure(int PRESS_OUT_XL, int PRESS_OUT_L, int PRESS_OUT_H)
@@ -391,50 +410,162 @@ void LPS25HB(int start, int ende)// Temperatur und Drucksensor
     FILE *file = fopen(filename, "r");
     if(file == NULL)
     {
-	    printf("Datei konnte NICHT geoeffnet werden.\n");
+        printf("Datei konnte NICHT geoeffnet werden.\n");
         exit(-1);
     }
     char line[100];
-
-    fgets(line, sizeof(line), file);
-    printf("Zeile: %s", line);
     char delimiter[] = ";";
-    char *token = strtok(line, delimiter);
     int counter = 0;
     int PRESS_OUT_[3];
     int TEMP_OUT_[2];
+    int rawtime;
+    int time_count = 0;
+    double start_time = 0;
+    double end_time = 0;
+    int outputcheck = 0;
 
-    while(token != NULL)
+    while (fgets(line, sizeof(line), file))
     {
-        switch (counter)
+        char *token = strtok(line, delimiter);
+        rawtime = atoi(token);
+        double number = atof(token);
+        if (time_count == 0)
         {
-        case 0:
-            hex_time((time_t)token);
-            break;
-        case 1:
-            TEMP_OUT_[0] = (int)strtol(token, NULL, 16);
-            break;
-        case 2:
-            TEMP_OUT_[1] = (int)strtol(token, NULL, 16);
-            LPS25HB_temp(TEMP_OUT_[0], TEMP_OUT_[1]);
-            break;
-        case 3:
-            PRESS_OUT_[0] = (int)strtol(token, NULL, 16);
-            break;
-        case 4:
-            PRESS_OUT_[1] = (int)strtol(token, NULL, 16);
-            break;
-        case 5:
-            PRESS_OUT_[2] = (int)strtol(token, NULL, 16);
-            LPS25HB_pressure(PRESS_OUT_[0], PRESS_OUT_[1], PRESS_OUT_[2]);
-            break;
-        default:
-            break;
+            start_time = number + (float)start/1000;
+            end_time = number + (float)ende/1000;
+            time_count++;
         }
-        token = strtok(NULL, delimiter);
-        counter++;
+        while(token != NULL && number >= start_time && number <= end_time)
+        {
+            outputcheck = 1;
+            switch (counter)
+            {
+            case 0:
+                hex_time(rawtime, number);
+                break;
+            case 1:
+                TEMP_OUT_[0] = (int)strtol(token, NULL, 16);
+                break;
+            case 2:
+                TEMP_OUT_[1] = (int)strtol(token, NULL, 16);
+                LPS25HB_temp(TEMP_OUT_[0], TEMP_OUT_[1]);
+                break;
+            case 3:
+                PRESS_OUT_[0] = (int)strtol(token, NULL, 16);
+                break;
+            case 4:
+                PRESS_OUT_[1] = (int)strtol(token, NULL, 16);
+                break;
+            case 5:
+                PRESS_OUT_[2] = (int)strtol(token, NULL, 16);
+                LPS25HB_pressure(PRESS_OUT_[0], PRESS_OUT_[1], PRESS_OUT_[2]);
+                break;
+            default:
+                break;
+            }
+            token = strtok(NULL, delimiter);
+            counter++;
+        }
+        counter = 0;
     }
+    if (outputcheck == 0)
+    {
+        printf("Keine Sensorwerte fuer den gewaehlten Bereich verfuegbar!\n");
+    }
+
+    fclose(file);
 }
-//------------------------------------------------------------------------------------------------------
 
+void HTS221(int start, int ende)
+{
+    char filename[100] = "Test_Data_10k_HTS221.csv";
+    FILE *file = fopen(filename, "r");
+    if(file == NULL)
+    {
+        printf("Datei konnte NICHT geoeffnet werden.\n");
+        exit(-1);
+    }
+    char line[100];
+    char delimiter[] = ";";
+    int counter = 0;
+    int HUM_OUT_[2];
+    int TEMP_OUT_[2];
+    int rawtime;
+    int time_count = 0;
+    double start_time = 0;
+    double end_time = 0;
+    int outputcheck = 0;
+    while (fgets(line, sizeof(line), file))
+    {
+        char *token = strtok(line, delimiter);
+        rawtime = atoi(token);
+        double number = atof(token);
+        if (time_count == 0)
+        {
+            start_time = number + (float)start/1000;
+            end_time = number + (float)ende/1000;
+            time_count++;
+        }
+        while(token != NULL && number >= start_time && number <= end_time)
+        {
+            outputcheck = 1;
+            switch (counter)
+            {
+            case 0:
+                hex_time(rawtime, number);
+                break;
 
+            case 1:
+                TEMP_OUT_[0] = (int)strtol(token, NULL, 16);
+                break;
+            case 2:
+                TEMP_OUT_[1] = (int)strtol(token, NULL, 16);
+                HTS221_TEMP(TEMP_OUT_[0],TEMP_OUT_[1]);
+                break;
+            case 3:
+                HUM_OUT_[0] = (int)strtol(token, NULL, 16);
+                break;
+            case 4:
+                HUM_OUT_[1] = (int)strtol(token, NULL, 16);
+                HTS221_HUM(HUM_OUT_[0],HUM_OUT_[1]);
+                break;
+
+            default:
+                break;
+            }
+            token = strtok(NULL, delimiter);
+            counter++;
+
+        }
+        counter = 0;
+    }
+    if (outputcheck == 0)
+    {
+        printf("Keine Sensorwerte fuer den gewaehlten Bereich verfuegbar!\n");
+    }
+    fclose(file);
+}
+
+void HTS221_HUM(int HUM_OUT_L, int HUM_OUT_H)
+{
+    int HUM_OUT_MEAS = (HUM_OUT_H << 8) + HUM_OUT_L;
+    HUM_OUT_MEAS = invert(HUM_OUT_MEAS);
+    int HUM_0 = 5;//0X0005;
+    int HUM_1 = -9813; //0XD9AA;
+    float H0_RH = 34;//0X44 / 2;
+    float H1_RH = 67;//0X86 / 2;
+    float HUM_CAL = (H1_RH - H0_RH)*(HUM_OUT_MEAS - HUM_0)/(HUM_1 - HUM_0) + H0_RH;
+    printf("Humidity: %.2f%%\n", HUM_CAL);
+}
+
+void HTS221_TEMP(int TEMP_OUT_L, int TEMP_OUT_H)
+{
+    int TEMP_OUT_MEAS = (TEMP_OUT_H << 8) + TEMP_OUT_L;
+    TEMP_OUT_MEAS = invert(TEMP_OUT_MEAS);
+    int TEMP_0 = -4;//0XFFFB;
+    int TEMP_1 = 725; //0X02D5;
+    float T0_RH = 19.75;
+    float T1_RH = 33.125;
+    float TEMP_CAL = (T1_RH - T0_RH)*(TEMP_OUT_MEAS - TEMP_0)/(TEMP_1 - TEMP_0) + T0_RH;
+    printf("Temperatur: %.2f deg.C\n", TEMP_CAL);
+}

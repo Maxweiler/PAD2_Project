@@ -31,17 +31,19 @@
 	<time.h>
 	"header.h"
 
-1591885527 source:c:\users\max\desktop\bmr\semester2\pad2\project\thema_1\github-projekt\pad2_project\programm\functions.c
+1591998971 source:c:\users\max\desktop\bmr\semester2\pad2\project\thema_1\github-projekt\pad2_project\programm\functions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<time.h>
 	"header.h"
 
-1591885527 c:\users\max\desktop\bmr\semester2\pad2\project\thema_1\github-projekt\pad2_project\programm\header.h
+1591998717 c:\users\max\desktop\bmr\semester2\pad2\project\thema_1\github-projekt\pad2_project\programm\header.h
 
-1591885723 source:c:\users\max\desktop\bmr\semester2\pad2\project\thema_1\github-projekt\pad2_project\programm\main.c
+1591998362 source:c:\users\max\desktop\bmr\semester2\pad2\project\thema_1\github-projekt\pad2_project\programm\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<time.h>
 	"header.h"
 
