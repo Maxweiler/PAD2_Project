@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/mbrus/Documents/GitHub/PAD2_Project/build/functions.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+time.h
+-
+header.h
+C:/Users/mbrus/Documents/GitHub/PAD2_Project/build/header.h
+
+C:/Users/mbrus/Documents/GitHub/PAD2_Project/build/header.h
+
