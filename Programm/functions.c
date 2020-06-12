@@ -120,7 +120,7 @@ void menu()
                     scanf("%d",&start);
                     printf("Endzeit:");
                     scanf("%d",&ende);
-                    //printf("%d-%d\n", start, ende); 
+                    //printf("%d-%d\n", start, ende);
                     LPS25HB(start,ende);            //Funktionsaufruf
                     printf("Anderen Zeitraum waehlen(1) oder zurueck zum Menue(5)?");
                     scanf("%d", &nav);
@@ -247,9 +247,7 @@ void readLSM(int start,int ende,int auswahl_wert)
                 {
                 case 0:
                     data.accx=strtoll(ptr,NULL,16);
-                    printf("%d",data.accx);
                     data.accx=invertieren(data.accx);
-                    printf("%d",data.accx);
                     ptr=strtok(NULL,";");
                     counter++;
                     break;
@@ -387,13 +385,13 @@ void LPS25HB(int start, int ende)// Temperatur und Drucksensor
 {
     char filename[100] = "Test_Data_10k_LPS25.csv";
     FILE *file = fopen(filename, "r");
-    if(file == NULL) 
+    if(file == NULL)
     {
 	    printf("Datei konnte NICHT geoeffnet werden.\n");
         exit(-1);
     }
     char line[100];
-    
+
     fgets(line, sizeof(line), file);
     printf("Zeile: %s", line);
     char delimiter[] = ";";
